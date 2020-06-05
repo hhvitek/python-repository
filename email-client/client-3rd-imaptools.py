@@ -8,6 +8,7 @@ Fetch method workd pretty weirdly
 
 import logging
 from imap_tools import MailBox
+from settings import Settings
 
 if __name__ == "__main__":
     logging.basicConfig(
@@ -18,12 +19,15 @@ if __name__ == "__main__":
 
     logging.info("STARTING")
 
-    mailbox = MailBox("imap.seznam.cz")
+    settings = Settings("./.settings.ini")
+    USERNAME = settings.get_username()
+    PASSWORD = settings.get_password()
+    SERVER = settings.get_server()
+
+    mailbox = MailBox(SERVER)
     mailbox.login(USERNAME, PASSWORD, initial_folder="INBOX")
 
-    # mailbox.seen(mailbox.fetch("(UNSEEN)"), False)
-    # for message in mailbox.fetch('(UNSEEN)', charset='utf-8', mark_seen=False):
-    #    print(message.headers())
+    mailbox.seen(mailbox.fetch("(UNSEEN)"), False)
 
     mailbox.logout()
     logging.info("FINISHED")

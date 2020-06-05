@@ -6,7 +6,7 @@ Using 3rd party library IMAPClient 2.1.0
 
 import logging
 from imapclient import IMAPClient
-
+from settings import Settings
 
 if __name__ == "__main__":
     logging.basicConfig(
@@ -17,7 +17,12 @@ if __name__ == "__main__":
 
     logging.info("STARTING")
 
-    server = IMAPClient("imap.seznam.cz")
+    settings = Settings("./.settings.ini")
+    USERNAME = settings.get_username()
+    PASSWORD = settings.get_password()
+    SERVER = settings.get_server()
+
+    server = IMAPClient(SERVER)
     server.login(USERNAME, PASSWORD)
 
     select_info = server.select_folder("INBOX")
@@ -25,5 +30,7 @@ if __name__ == "__main__":
 
     messages = server.search("UNSEEN")
     server.fetch(messages, "RFC822")
+
+    server.logout()
 
     logging.info("FINISHED")

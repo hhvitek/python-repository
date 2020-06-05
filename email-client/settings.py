@@ -31,6 +31,8 @@ class Settings:
             "PASSWORD": "",
         }
 
+        config_parser["IMAP"] = {"SERVER": ""}
+
         return config_parser
 
     def _load_config_from_file(self, path=DEFAULT_CONFIG_PATH):
@@ -68,3 +70,6 @@ class Settings:
 
     def get_password(self):
         return self.get_value("LOGIN", "PASSWORD")
+
+    def get_server(self):
+        return self.get_value("IMAP", "SERVER")
