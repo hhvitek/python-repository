@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
-from .task import Task
 import logging
 
+from .task import Task
 
-class RestartTasl(Task):
+
+class RestartTask(Task):
     """this task will restart the computer"""
 
     def __init__(self):

@@ -2,6 +2,7 @@
 
 import importlib
 import pkgutil
+import logging
 
 
 class ClassLoader:
@@ -19,6 +20,14 @@ class ClassLoader:
     def from_string(self, modulename_classname):
         modulename, classname = modulename_classname.rsplit(".", 1)
         return self.from_module_classname(modulename, classname)
+
+    def from_string_on_error_none(self, modulename_classname):
+        modulename, classname = modulename_classname.rsplit(".", 1)
+        try:
+            return self.from_module_classname(modulename, classname)
+        except (ModuleNotFoundError, AttributeError) as ex:
+            logging.warn(f"Failed to found class: {modulename_classname} : {ex}")
+            return None
 
     def get_modules_names(self, folder_package_path, module_name_suffix=""):
         modules_names = []

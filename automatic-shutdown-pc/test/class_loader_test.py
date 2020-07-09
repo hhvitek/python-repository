@@ -24,7 +24,7 @@ class ClassLoaderTest(unittest.TestCase):
 
         self.assertIsInstance(restart_instance, RestartTask)
 
-    def test_load_nonexistent_class(self):
+    def test_load_nonexistent_class_raise(self):
         loader = ClassLoader()
         modulename = "tasks.shutdown_task"
         classname = "NonExistentTask"
@@ -32,7 +32,7 @@ class ClassLoaderTest(unittest.TestCase):
             AttributeError, lambda: loader.from_module_classname(modulename, classname)
         )
 
-    def test_load_nonexistent_module(self):
+    def test_load_nonexistent_module_raise(self):
         loader = ClassLoader()
         modulename = "tasks.nonexistent_task"
         classname = "ShutdownTask"
@@ -40,6 +40,14 @@ class ClassLoaderTest(unittest.TestCase):
             ModuleNotFoundError,
             lambda: loader.from_module_classname(modulename, classname),
         )
+
+    def test_load_nonexistent_module_returns_none(self):
+        loader = ClassLoader()
+        modulename_classname = "tasks.nonexistent_task.ShutdownTask"
+
+        nonexistent_instance = loader.from_string_on_error_none(modulename_classname)
+
+        self.assertIsNone(nonexistent_instance)
 
     def test_load_shutdown_from_string(self):
         loader = ClassLoader()

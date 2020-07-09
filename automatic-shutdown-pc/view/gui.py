@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import logging
-import PySimpleGUI as sg
+from .window_creator import WindowCreator
+from .window_manager import WindowManager
 
 
 class Gui:
@@ -9,62 +10,27 @@ class Gui:
 
     def __init__(self, model):
         self.model = model
-        self.window = self._create_ui_window()
 
-    def _create_ui_window(self):
-        sg.ChangeLookAndFeel("GreenTan")
-        self._create_tasks_frame()
-
-    def _create_tasks_frame(self):
-        return (
-            sg.Frame(
-                "Vyberte Akci",
-                [
-                    [
-                        sg.Slider(
-                            range=(1, 100),
-                            orientation="v",
-                            size=(5, 20),
-                            default_value=25,
-                            tick_interval=25,
-                        ),
-                        sg.Slider(
-                            range=(1, 100),
-                            orientation="v",
-                            size=(5, 20),
-                            default_value=75,
-                        ),
-                        sg.Slider(
-                            range=(1, 100),
-                            orientation="v",
-                            size=(5, 20),
-                            default_value=10,
-                        ),
-                        sg.Col(column1),
-                    ]
-                ],
-            ),
-        )
-
-    def _create_timing_frame(self):
-        pass
-
-    def _create_countdown_frame(self):
-        pass
-
-    def _create_controls_frame(self):
-        pass
-
-    def _create_statusbar_frame(self):
-        pass
+        window_creator = WindowCreator(model)
+        self.window = window_creator.create()
+        self.window_manager = WindowManager(self.window)
 
     def run(self):
         while True:
-            event, values = self.window.Read(timeout=100)
+            event, values = self.window.Read(timeout=1000, timeout_key="timeout")
 
-            if event is None or event == "Exit":
+            if event is None or event == "Exit" or event == "button_exit":
                 break
-            elif event.startswith("b_load_"):
-                pass
+            elif event == "spin_timing":
+                logging.info("Spin changed")
+                self.window_manager.spin_timing_changed()
+            elif event == "timeout":
+                logging.info("Timeout")
+            elif event == "button_cancel":
+                logging.info("Cancel")
+            elif event == "button_submit":
+                logging.info("Start")
+            else:
+                logging.info(event)
 
         self.window.Close()

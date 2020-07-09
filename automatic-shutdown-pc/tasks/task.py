@@ -31,6 +31,14 @@ class Task(ABC):
     def get_parameters(self):
         return self.parameters
 
+    # toString method
+    def __str__(self):
+        return f"Task: {self.name}"
+
+    # unique representation of this object
+    def __repr__(self):
+        return str(self)
+
     @abstractmethod
     def execute(self):
         pass

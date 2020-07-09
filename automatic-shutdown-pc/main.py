@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import logging
-from view.gui3 import Gui
+from view.gui import Gui
 from model.model import Model
 from model.class_loader import ClassLoader
 
@@ -31,8 +31,8 @@ if __name__ == "__main__":
     logging.info("STARTING")
 
     tasks = get_tasks_from_tasks_modules(TASKS_ACTIVE)
+    logging.info(f"The following task has been instantiated: {tasks}")
+
     model = Model(tasks)
-
-    gui = Gui()
+    gui = Gui(model)
     gui.run()
-
