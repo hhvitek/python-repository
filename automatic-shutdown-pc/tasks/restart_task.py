@@ -3,6 +3,7 @@
 import logging
 
 from .task import Task
+from .task_exception import TaskError
 
 
 class RestartTask(Task):
@@ -16,3 +17,4 @@ class RestartTask(Task):
 
     def execute(self):
         logging.info("Execution Restart...")
+        raise TaskError("Not Implemented!")

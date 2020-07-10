@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from abc import ABC, abstractmethod
+from .task_exception import TaskError
 
 
 class Task(ABC):
@@ -10,10 +11,6 @@ class Task(ABC):
         self.name = name
         self.description = description
         self.parameters = {}
-
-    @staticmethod
-    def get_all_tasks(tasks):
-        pass
 
     def get_name(self):
         return self.name
@@ -41,13 +38,9 @@ class Task(ABC):
 
     @abstractmethod
     def execute(self):
-        pass
+        """
+            Returns string message
 
-    def is_auto_plannable(self):
-        return False
-
-    def plan_execution(self, seconds):
-        pass
-
-    def unplan_execution(self):
-        pass
+            on error raises TaskError exception
+        """
+        raise TaskError("Execute method is not overriden!")

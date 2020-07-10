@@ -15,3 +15,4 @@ class ShutdownTask(Task):
 
     def execute(self):
         logging.info("Execution ShutDown...")
+        return "OK"

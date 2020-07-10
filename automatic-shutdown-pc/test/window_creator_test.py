@@ -1,16 +1,19 @@
 import unittest
 
-from model.model import Model
-from tasks.restart_task import RestartTask
-from tasks.shutdown_task import ShutdownTask
+from model.task_model import TaskModel
 from view.window_creator import WindowCreator
 
 
 class WindowCreatorTest(unittest.TestCase):
     def setUp(self):
-        tasks = [ShutdownTask(), RestartTask()]
-        model = Model(tasks)
-        self.creator = WindowCreator(model)
+        tasks_active = [
+            "tasks.shutdown_task.ShutdownTask",
+            "tasks.restart_task.RestartTask",
+        ]
+        self.task_model = TaskModel(tasks_active)
+        tasks = self.task_model.get_tasks()
+
+        self.creator = WindowCreator(tasks)
 
     def test_generator_sequence(self):
         step_in_minutes = 30

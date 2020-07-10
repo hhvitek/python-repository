@@ -1,6 +1,6 @@
 import unittest
 
-from view.timedelta_manager import TimedeltaManager
+from model.timedelta_manager import TimedeltaManager
 from datetime import datetime, timedelta
 
 
@@ -24,7 +24,7 @@ class TimedeltaManagerTest(unittest.TestCase):
         self.manager.set_when_elapsed_using_afterdelta(afterdelta)
 
         remaining = self.manager.get_remaining()
-        self.assertEqual(afterdelta, remaining)
+        self.assertEqual(afterdelta + ":00", remaining)
 
 
 if __name__ == "__main__":

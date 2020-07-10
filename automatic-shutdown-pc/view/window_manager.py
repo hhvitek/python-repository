@@ -1,31 +1,92 @@
 #!/usr/bin/env python
 
-from .timedelta_manager import TimedeltaManager
+import logging
+from .window_creator import WindowCreator
+from model.timedelta_manager import TimedeltaManager
 
 
 class WindowManager:
-    def __init__(self, window):
-        self.window = window
+    """
+    A class to manipulate existing window object, based on (depends) 
+    objects unique keys/identificators created by WindowCreator object
+    """
+
+    def __init__(self, task_model, state_model):
+        self.task_model = task_model
+        self.state_model = state_model
+
+        self.window_creator = None
+        self.window = self._create_window()
+        self.status_bar = self.window["status_bar"]
+
         self.timedelta_manager = TimedeltaManager()
 
-    def get_selected_item(self):
+        self.restore_window_state_from_model()
+
+    def _create_window(self):
+        tasks = self.task_model.get_tasks()
+        self.window_creator = WindowCreator(tasks)
+        return self.window_creator.create()
+
+    def get_window(self):
+        return self.window
+
+    def echo_info_to_user(self, info_message):
+        logging.info(info_message)
+        self.status_bar.expand(expand_x=True, expand_row=True)
+        self.status_bar.update(value=info_message)
+
+    def echo_error_to_user(self, error_message):
+        self.echo_info_to_user(error_message)
+        error_popup = self.window_creator.create_error_popup(error_message)
+
+    def restore_window_state_from_model(self):
+        selected_task_name = self.state_model.get_selected_task_name()
+        timedelta_manager = self.state_model.get_timedelta_delay()
+        scheduled_task_name = self.state_model.get_scheduled_task_name()
+
+        if selected_task_name is not None:
+            self.window["combo_tasks"].update(value=selected_task_name)
+
+        if timedelta_manager is not None:
+            self.update_countdown_using_timedelta_delay(timedelta_manager)
+        else:
+            self.spin_timing_changed()
+
+    def set_configuring_state(self):
+        pass
+
+    def set_countdown_state(self):
         pass
 
     def spin_timing_changed(self):
         # 00:00
         timing = self.window.Element("spin_timing").Get()
         self.timedelta_manager.set_when_elapsed_using_afterdelta(timing)
-        self._update_countdown_when_elapsed()
-        self._update_countdown_remaining()
+        self.update_countdown_using_timedelta_delay(self.timedelta_manager)
 
-    def _update_countdown_when_elapsed(self):
+    def update_countdown_using_timedelta_delay(self, timedelta_delay=None):
+
+        self._update_countdown_when_elapsed(timedelta_delay)
+        self._update_countdown_remaining(timedelta_delay)
+
+    def _update_countdown_when_elapsed(self, timedelta_delay=None):
+
+        if timedelta_delay is None:
+            timedelta_delay = self.timedelta_manager
+
         text_when_elapsed = self.window.Element("text_countdown_when_elapsed")
-        when_elapsed = self.timedelta_manager.get_when_elapsed()
+
+        when_elapsed = timedelta_delay.get_when_elapsed()
 
         text_when_elapsed.Update(value=when_elapsed)
 
-    def _update_countdown_remaining(self):
+    def _update_countdown_remaining(self, timedelta_delay=None):
+
+        if timedelta_delay is None:
+            timedelta_delay = self.timedelta_manager
+
         text_remaininig = self.window.Element("text_countdown_remaining")
-        remaining = self.timedelta_manager.get_remaining()
+        remaining = timedelta_delay.get_remaining()
 
         text_remaininig.Update(value=remaining)

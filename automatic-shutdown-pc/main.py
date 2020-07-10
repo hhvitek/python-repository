@@ -2,22 +2,12 @@
 
 import logging
 from view.gui import Gui
-from model.model import Model
-from model.class_loader import ClassLoader
+from model.task_model import TaskModel
+from model.state_model import StateModel
 
 
 TASKS_ACTIVE = ["tasks.shutdown_task.ShutdownTask", "tasks.restart_task.RestartTask"]
-
-
-def get_tasks_from_tasks_modules(tasks_modules):
-
-    loader = ClassLoader()
-    tasks = []
-    for task_module in tasks_modules:
-        task = loader.from_string(task_module)
-        tasks.append(task)
-
-    return tasks
+DEFAULT_STR_AFTERDELTA = "00:30"
 
 
 if __name__ == "__main__":
@@ -30,9 +20,7 @@ if __name__ == "__main__":
 
     logging.info("STARTING")
 
-    tasks = get_tasks_from_tasks_modules(TASKS_ACTIVE)
-    logging.info(f"The following task has been instantiated: {tasks}")
-
-    model = Model(tasks)
-    gui = Gui(model)
+    task_model = TaskModel(TASKS_ACTIVE)
+    state_model = StateModel(DEFAULT_STR_AFTERDELTA)
+    gui = Gui(task_model, state_model)
     gui.run()
