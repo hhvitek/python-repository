@@ -6,6 +6,10 @@ import logging
 
 
 class ClassLoader:
+    """
+        Instantiate class using full moduleName.className
+    """
+
     def __init__(self):
         pass
 

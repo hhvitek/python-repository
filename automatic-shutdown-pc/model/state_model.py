@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import logging
 from .timedelta_manager import TimedeltaManager
 
 DEFAULT_STR_AFTERDELTA = "00:30"
@@ -8,6 +9,7 @@ DEFAULT_STR_AFTERDELTA = "00:30"
 class StateModel:
     """
     Represents the current state (status) of this application.
+    This is dynamic state, possibly can be stored in database for persistence
     """
 
     def __init__(
@@ -25,17 +27,18 @@ class StateModel:
         self.restore_initial_state()
 
     def restore_initial_state(self):
-        self.timedelta_delay = TimedeltaManager(self.default_str_afterdelta)
-        self.scheduled_task_name = None
-        self.selected_task_name = self.default_selected_task_name
+        self.set_scheduled_task(None)
+        self.set_selected_task_name(self.default_selected_task_name)
 
     def set_selected_task_name(self, task_name):
+        logging.info(f"The new task selected: <{task_name}>.")
         self.selected_task_name = task_name
 
     def get_selected_task_name(self):
         return self.selected_task_name
 
     def set_scheduled_task(self, task_name, str_afterdelta=DEFAULT_STR_AFTERDELTA):
+        logging.info(f"The new task scheduled: <{task_name}>:<{str_afterdelta}>")
         self.scheduled_task_name = task_name
         self.timedelta_delay = TimedeltaManager(str_afterdelta)
 
@@ -59,5 +62,7 @@ class StateModel:
         return self.timedelta_delay is not None and self.scheduled_task_name is not None
 
     def cancel_scheduled_task(self):
-        self.timedelta_delay = None
-        self.scheduled_task_name = None
+        if self.is_scheduled():
+            logging.info(f"Scheduled task cancelled: <{self.get_scheduled_task_name}>")
+            self.timedelta_delay = None
+            self.scheduled_task_name = None

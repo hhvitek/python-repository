@@ -7,6 +7,7 @@ from .class_loader import ClassLoader
 class TaskModel:
     """
     Represents interface to tasks(operations) supported by application.
+    It's static data and task's behaviour
     """
 
     def __init__(self, tasks_module_names):

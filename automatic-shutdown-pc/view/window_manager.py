@@ -48,16 +48,52 @@ class WindowManager:
         if selected_task_name is not None:
             self.window["combo_tasks"].update(value=selected_task_name)
 
-        if timedelta_manager is not None:
+        if scheduled_task_name is not None:
             self.update_countdown_using_timedelta_delay(timedelta_manager)
+            self.set_countdown_state()
         else:
             self.spin_timing_changed()
+            self.set_configuring_state()
 
     def set_configuring_state(self):
-        pass
+        """
+            * Cannot choose another task
+            * Cannot change timing
+            * Cannot schedule another task
+            * Can cancel scheduled task / stop countdown / reset window
+        """
+        logging.info("Setting configuring state.")
+        self._set_window_state(True)
+
+    def _set_window_state(self, can=True):
+        self._can_choose_another_task(can)
+        self._can_change_timing(can)
+        self._can_schedule_another_task(can)
+
+    def _can_choose_another_task(self, can=True):
+        combo = self.window["combo_tasks"]
+        combo.update(disabled=not can, readonly=not can)
+
+    def _can_change_timing(self, can=True):
+        spin_timing = self.window["spin_timing"]
+        spin_timing.update(disabled=not can)
+
+    def _can_schedule_another_task(self, can=True):
+        button_submit = self.window["button_submit"]
+        button_submit.update(disabled=not can)
+
+        button_cancel = self.window["button_cancel"]
+        button_cancel.update(disabled=can)
 
     def set_countdown_state(self):
-        pass
+        """
+            * Can choose another task
+            * Can change timing
+            * Can schedule another task
+            * Cannot cancel scheduled task / stop countdown / reset window
+        """
+        logging.info("Setting countdown state.")
+        self._set_window_state(False)
 
     def spin_timing_changed(self):
         # 00:00

@@ -4,6 +4,10 @@ from datetime import timedelta, datetime
 
 
 class TimedeltaManager:
+    """
+        Represents datetime in future/past
+        Could return as timedelta/duration/delay
+    """
 
     # 00:00
     def __init__(self, str_afterdelta="00:00"):
