@@ -32,7 +32,6 @@ class WindowManager:
         return self.window
 
     def echo_info_to_user(self, info_message):
-        logging.info(info_message)
         self.status_bar.expand(expand_x=True, expand_row=True)
         self.status_bar.update(value=info_message)
 

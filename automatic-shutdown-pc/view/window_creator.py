@@ -11,6 +11,7 @@ class WindowCreator:
 
     WINDOW_X = 360
     WINDOW_Y = 375
+    WINDOW_ICO_FILE = "resources\\shutdown_icon.ico"
 
     def __init__(self, tasks):
         self.tasks = tasks
@@ -40,6 +41,7 @@ class WindowCreator:
             element_justification="center",
             font="Any 12",
             finalize=True,
+            icon=WindowCreator.WINDOW_ICO_FILE,
         )
 
         self._expand_all_frames()

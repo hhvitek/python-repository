@@ -130,3 +130,6 @@ dmypy.json
 
 # Disallow all files / folders with dot prefix
 .*
+
+# Shortcut files .lnk
+*.lnk
