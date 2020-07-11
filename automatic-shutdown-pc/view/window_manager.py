@@ -17,10 +17,10 @@ class WindowManager:
 
         self.window_creator = None
         self.window = self._create_window()
-        self.status_bar = self.window["status_bar"]
 
         self.timedelta_manager = TimedeltaManager()
 
+        self.is_configuring_state = None
         self.restore_window_state_from_model()
 
     def _create_window(self):
@@ -32,8 +32,9 @@ class WindowManager:
         return self.window
 
     def echo_info_to_user(self, info_message):
-        self.status_bar.expand(expand_x=True, expand_row=True)
-        self.status_bar.update(value=info_message)
+        status_bar = self.window["status_bar"]
+        status_bar.expand(expand_x=True, expand_row=True)
+        status_bar.update(value=info_message)
 
     def echo_error_to_user(self, error_message):
         self.echo_info_to_user(error_message)
@@ -61,13 +62,15 @@ class WindowManager:
             * Cannot schedule another task
             * Can cancel scheduled task / stop countdown / reset window
         """
-        logging.info("Setting configuring state.")
-        self._set_window_state(True)
+        if not self._is_in_configuring_state():
+            logging.debug("Setting configuring state.")
+            self._set_window_state(True)
 
-    def _set_window_state(self, can=True):
-        self._can_choose_another_task(can)
-        self._can_change_timing(can)
-        self._can_schedule_another_task(can)
+    def _set_window_state(self, counfiguring=True):
+        self._can_choose_another_task(counfiguring)
+        self._can_change_timing(counfiguring)
+        self._can_schedule_another_task(counfiguring)
+        self.is_configuring_state = counfiguring
 
     def _can_choose_another_task(self, can=True):
         combo = self.window["combo_tasks"]
@@ -84,6 +87,9 @@ class WindowManager:
         button_cancel = self.window["button_cancel"]
         button_cancel.update(disabled=can)
 
+    def _is_in_configuring_state(self):
+        return self.is_configuring_state
+
     def set_countdown_state(self):
         """
             * Can choose another task
@@ -91,8 +97,9 @@ class WindowManager:
             * Can schedule another task
             * Cannot cancel scheduled task / stop countdown / reset window
         """
-        logging.info("Setting countdown state.")
-        self._set_window_state(False)
+        if self._is_in_configuring_state():
+            logging.debug("Setting countdown state.")
+            self._set_window_state(False)
 
     def spin_timing_changed(self):
         # 00:00

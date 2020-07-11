@@ -51,4 +51,5 @@ class TaskModel:
         else:
             task = self.tasks_dict[task_name]
             result_message = task.execute()
+            logging.info("Task <{task_name}> executed.")
             return result_message

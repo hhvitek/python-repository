@@ -30,7 +30,7 @@ class ClassLoader:
         try:
             return self.from_module_classname(modulename, classname)
         except (ModuleNotFoundError, AttributeError) as ex:
-            logging.warn(f"Failed to found class: {modulename_classname} : {ex}")
+            logging.erro(f"Failed to found class: {modulename_classname} : {ex}")
             return None
 
     def get_modules_names(self, folder_package_path, module_name_suffix=""):

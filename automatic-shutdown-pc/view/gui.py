@@ -62,6 +62,7 @@ class Gui:
                 f"{scheduled_task_name} chyba. Neznámá akce."
             )
         except TaskError as e:
+            logging.error(f"TASK_ERROR {e}")
             self.window_manager.echo_error_to_user()(
                 f"{scheduled_task_name} chyba. {e}"
             )
@@ -73,9 +74,13 @@ class Gui:
             self.window_manager.echo_info_to_user(f"Načasovaná akce zrušena.")
 
     def run(self):
+
+        logging.debug("Starting GUI event loop...")
         while True:
             event, values = self.window.Read(timeout=1000, timeout_key="timeout")
 
+            if event != "timeout":
+                logging.debug(f"EVENT: {event}")
             if event is None or event == "Exit" or event == "button_exit":
                 break
             elif event == "combo_tasks":
@@ -91,8 +96,5 @@ class Gui:
                 self._new_task_scheduled_by_user(task_name, str_afterdelta)
             elif event == "button_cancel":
                 self._cancel_task()
-
-            if event != "timeout":
-                logging.info(f"EVENT: {event}")
 
         self.window.Close()

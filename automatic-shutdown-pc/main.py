@@ -23,6 +23,7 @@ import tasks.restart_task
 
 
 TASKS_ACTIVE = ["tasks.shutdown_task.ShutdownTask", "tasks.restart_task.RestartTask"]
+DEFAULT_TASK = "Shutdown"
 DEFAULT_STR_AFTERDELTA = "00:30"
 LOG_FILENAME = "shutdown.log"
 
@@ -31,7 +32,7 @@ if __name__ == "__main__":
 
     logging.basicConfig(
         format="%(asctime)s|%(levelname)s|%(filename)s|%(funcName)s||%(message)s",
-        level=logging.INFO,
+        level=logging.DEBUG,
         datefmt="%Y-%m-%d %H:%M:%S",
         handlers=[
             logging.FileHandler(filename=LOG_FILENAME, mode="a", encoding="utf-8")
@@ -41,6 +42,8 @@ if __name__ == "__main__":
     logging.info("STARTING")
 
     task_model = TaskModel(TASKS_ACTIVE)
-    state_model = StateModel(DEFAULT_STR_AFTERDELTA)
+    state_model = StateModel(DEFAULT_STR_AFTERDELTA, DEFAULT_TASK)
     gui = Gui(task_model, state_model)
     gui.run()
+
+    logging.info("FINISHED\n\n")
