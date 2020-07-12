@@ -18,10 +18,9 @@ class TaskModel:
         self.tasks_dict = self._convert_tasks_list_to_dict(self.tasks)
 
     def _get_tasks_from_tasks_modules(self, tasks_module_names):
-        loader = ClassLoader()
         tasks = []
         for task_module in tasks_module_names:
-            task = loader.from_string(task_module)
+            task = ClassLoader.from_string(task_module)
             tasks.append(task)
         return tasks
 

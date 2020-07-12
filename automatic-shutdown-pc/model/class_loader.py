@@ -11,29 +11,35 @@ class ClassLoader:
     """
 
     def __init__(self):
-        pass
+        raise NotImplementedError(
+            "ClassLoader class cannot be instantiated. It contains only static methods."
+        )
 
     # raises(AttributeError)
     # raises(ModuleNotFound)
-    def from_module_classname(self, modulename, classname):
+    @classmethod
+    def from_module_classname(cls, modulename, classname):
         module = importlib.import_module(modulename)
         class_ = getattr(module, classname)
         instance = class_()
         return instance
 
-    def from_string(self, modulename_classname):
+    @classmethod
+    def from_string(cls, modulename_classname):
         modulename, classname = modulename_classname.rsplit(".", 1)
-        return self.from_module_classname(modulename, classname)
+        return cls.from_module_classname(modulename, classname)
 
-    def from_string_on_error_none(self, modulename_classname):
+    @classmethod
+    def from_string_on_error_none(cls, modulename_classname):
         modulename, classname = modulename_classname.rsplit(".", 1)
         try:
-            return self.from_module_classname(modulename, classname)
+            return cls.from_module_classname(modulename, classname)
         except (ModuleNotFoundError, AttributeError) as ex:
-            logging.erro(f"Failed to found class: {modulename_classname} : {ex}")
+            logging.error(f"Failed to found class: {modulename_classname} : {ex}")
             return None
 
-    def get_modules_names(self, folder_package_path, module_name_suffix=""):
+    @classmethod
+    def get_modules_names(cls, folder_package_path, module_name_suffix=""):
         modules_names = []
         for finder, name, ispkg in pkgutil.iter_modules(folder_package_path):
             if name.endswith(module_name_suffix):

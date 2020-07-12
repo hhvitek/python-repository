@@ -90,6 +90,7 @@ class Gui:
                 self.window_manager.spin_timing_changed()
             elif event == "timeout":
                 self._tick_timeout_event()
+                self.window_manager.echo_error_to_user(f"{event} chyba.")
             elif event == "button_submit":
                 task_name = values["combo_tasks"]
                 str_afterdelta = values["spin_timing"]

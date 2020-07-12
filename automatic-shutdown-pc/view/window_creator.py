@@ -12,6 +12,7 @@ class WindowCreator:
     WINDOW_X = 360
     WINDOW_Y = 375
     WINDOW_ICO_FILE = "resources\\shutdown_icon.ico"
+    ERROR_ICO_FILE = "resources\\error_icon2.ico"
 
     def __init__(self, tasks):
         self.tasks = tasks
@@ -21,7 +22,16 @@ class WindowCreator:
         return self._create_ui_window()
 
     def create_error_popup(self, error_message):
-        return sg.PopupError(error_message)
+        return sg.popup_error(
+            error_message,
+            title="ERROR",
+            non_blocking=False,
+            grab_anywhere=True,
+            icon=WindowCreator.ERROR_ICO_FILE,
+            image=WindowCreator.ERROR_ICO_FILE,
+            keep_on_top=True,
+            line_width=200,
+        )
 
     def _create_ui_window(self):
         sg.ChangeLookAndFeel("GreenTan")
@@ -41,6 +51,7 @@ class WindowCreator:
             element_justification="center",
             font="Any 12",
             finalize=True,
+            default_button_element_size=(8, 1),
             icon=WindowCreator.WINDOW_ICO_FILE,
         )
 
@@ -154,9 +165,9 @@ class WindowCreator:
 
         layout = [
             [
-                sg.Button(button_text="Spustit", key="button_submit"),
-                sg.Button(button_text="Zrušit", key="button_cancel"),
-                sg.Button(button_text="Exit", key="button_exit"),
+                sg.Button(button_text="Spustit", key="button_submit", size=(8, 1)),
+                sg.Button(button_text="Zrušit", key="button_cancel", size=(8, 1)),
+                sg.Button(button_text="Exit", key="button_exit", size=(8, 1)),
             ]
         ]
 
