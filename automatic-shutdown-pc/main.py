@@ -9,20 +9,20 @@ from model.state_model import StateModel
 # doesnt work with tkinter - PySimpleGui library
 
 # PYINSTALLER
-# COULD USE pip install auto-py-to-exe
+# COULD USE pip install auto-py-to-exe GUI interface to the pyinstaller
 # SLOW START                pyinstaller --onefile --noconsole --icon="resources\shutdown_icon.ico" main.py
-# FASTER START, BUT FOLDER: pyinstaller --onedir --noconsole --icon="resources\shutdown_icon.ico" main.py
-# pyinstaller.exe --noconfirm --onedir --windowed --name "Vypnout PC"
-# --icon "resources/shutdown_icon.ico" --add-data "resources;resources"
-# main.py
+# MUCH FASTER START, BUT FOLDER: pyinstaller --onedir --noconsole --icon="resources\shutdown_icon.ico" main.py
+# pyinstaller.exe --noconfirm --onedir --windowed --name "Vypnout PC" --icon "resources/shutdown_icon.ico"
+#     --add-data "resources;resources" main.py
 
-# explicit imports needed because pyinstaller's error
-# ModuleNotFoundError: No module named 'tasks.restart_task'
+# following explicit imports are neccessary because of pyinstaller's error
+# ModuleNotFoundError: No module named 'tasks.restart_task' etc.
 import tasks.shutdown_task
 import tasks.restart_task
+import tasks.remainder_task
 
 
-TASKS_ACTIVE = ["tasks.shutdown_task.ShutdownTask", "tasks.restart_task.RestartTask"]
+TASKS_ACTIVE = ["tasks.shutdown_task.ShutdownTask", "tasks.restart_task.RestartTask", "tasks.remainder_task.RemainderTask"]
 DEFAULT_TASK = "Shutdown"
 DEFAULT_STR_AFTERDELTA = "00:30"
 LOG_FILENAME = "shutdown.log"

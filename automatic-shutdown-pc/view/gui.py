@@ -12,7 +12,7 @@ class Gui:
 
         Basicaly view-controller in one class
 
-        PySimpleGui's Event loop provides one second ticking   
+        PySimpleGui's Event loop provides one second ticking
     """
 
     def __init__(self, task_model, state_model):
@@ -29,10 +29,10 @@ class Gui:
         self.window_manager.echo_info_to_user(f"Nová akce vybrána: {task_name}.")
 
     # 00:00
-    def _new_task_scheduled_by_user(self, task_name, str_afterdelta):
+    def _new_task_scheduled_by_user(self, task_name, str_afterdelta, parameter=None):
 
         self.state_model.set_selected_task_name(task_name)
-        self.state_model.set_scheduled_task(task_name, str_afterdelta)
+        self.state_model.set_scheduled_task(task_name, str_afterdelta, parameter)
         self.window_manager.restore_window_state_from_model()
 
         self.window_manager.echo_info_to_user(
@@ -51,19 +51,21 @@ class Gui:
 
     def _execute_scheduled_task(self):
         scheduled_task_name = self.state_model.get_scheduled_task_name()
+        scheduled_task_parameter = self.state_model.get_scheduled_task_parameter()
+
         try:
-            result_message = self.task_model.execute_task(scheduled_task_name)
+            result_message = self.task_model.execute_task(scheduled_task_name, scheduled_task_parameter)
             self.window_manager.echo_info_to_user(
                 f"{scheduled_task_name} proběhla úspěšně. {result_message}"
             )
         except ValueError as e:
             logging.error(f"VALUE_ERROR {e}")
-            self.window_manager.echo_error_to_user()(
-                f"{scheduled_task_name} chyba. Neznámá akce."
+            self.window_manager.echo_error_to_user(
+                f"{scheduled_task_name} není rozpoznanou akcí... Vyberte:<{self.task_model.get_tasks_names()}>"
             )
         except TaskError as e:
             logging.error(f"TASK_ERROR {e}")
-            self.window_manager.echo_error_to_user()(
+            self.window_manager.echo_error_to_user(
                 f"{scheduled_task_name} chyba. {e}"
             )
 
@@ -74,13 +76,10 @@ class Gui:
             self.window_manager.echo_info_to_user(f"Načasovaná akce zrušena.")
 
     def run(self):
-
         logging.debug("Starting GUI event loop...")
         while True:
             event, values = self.window.Read(timeout=1000, timeout_key="timeout")
 
-            if event != "timeout":
-                logging.debug(f"EVENT: {event}")
             if event is None or event == "Exit" or event == "button_exit":
                 break
             elif event == "combo_tasks":
@@ -90,12 +89,13 @@ class Gui:
                 self.window_manager.spin_timing_changed()
             elif event == "timeout":
                 self._tick_timeout_event()
-                self.window_manager.echo_error_to_user(f"{event} chyba.")
             elif event == "button_submit":
                 task_name = values["combo_tasks"]
                 str_afterdelta = values["spin_timing"]
-                self._new_task_scheduled_by_user(task_name, str_afterdelta)
+                parameter = values["input_parameter"]
+                self._new_task_scheduled_by_user(task_name, str_afterdelta, parameter)
             elif event == "button_cancel":
                 self._cancel_task()
 
+        logging.debug("Finished GUI event loop...")
         self.window.Close()

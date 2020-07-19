@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import PySimpleGUI as sg
+import os
 
 
 class WindowCreator:
@@ -10,9 +11,9 @@ class WindowCreator:
     """
 
     WINDOW_X = 360
-    WINDOW_Y = 375
-    WINDOW_ICO_FILE = "resources\\shutdown_icon.ico"
-    ERROR_ICO_FILE = "resources\\error_icon2.ico"
+    WINDOW_Y = 390
+    WINDOW_ICO_FILE = os.path.join("resources", "shutdown_icon.ico")
+    ERROR_ICO_FILE = os.path.join("resources", "error_icon2.ico")
 
     def __init__(self, tasks):
         self.tasks = tasks
@@ -28,7 +29,6 @@ class WindowCreator:
             non_blocking=False,
             grab_anywhere=True,
             icon=WindowCreator.ERROR_ICO_FILE,
-            image=WindowCreator.ERROR_ICO_FILE,
             keep_on_top=True,
             line_width=200,
         )
@@ -65,7 +65,17 @@ class WindowCreator:
         """Choose task - operation"""
         tasks_names = self._get_tasks_names(self.tasks)
 
-        layout = [[self._create_tasks_combo(tasks_names)]]
+        layout = [
+            [self._create_tasks_combo(tasks_names)],
+            [
+                sg.Text("Parametr: "),
+
+                sg.Input(
+                    tooltip="Vložte požadovanou hodnotu parametru akce.",
+                    key="input_parameter",
+                )
+            ]
+        ]
 
         return self._create_frame("Vyberte akci", layout)
 

@@ -42,13 +42,13 @@ class TaskModel:
     def get_task(self, task_name):
         return self.tasks_dict.get(task_name)
 
-    def execute_task(self, task_name):
+    def execute_task(self, task_name, parameter=None):
         if task_name not in self.tasks_dict:
             error_message = f"Neznámá akce: <{task_name}>. Neprovedena žádná akce."
             logging.error(error_message)
             raise ValueError(error_message)
         else:
             task = self.tasks_dict[task_name]
-            result_message = task.execute()
-            logging.info("Task <{task_name}> executed.")
+            result_message = task.execute(parameter)
+            logging.info("Task <{task_name}> executed. Parameter <{parameter}>")
             return result_message

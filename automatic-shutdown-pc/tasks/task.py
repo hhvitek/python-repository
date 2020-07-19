@@ -7,15 +7,20 @@ from .task_exception import TaskError
 class Task(ABC):
     """Define an abstract task that can be scheduled by user"""
 
-    def __init__(self, name, description):
+    def __init__(self, name, description, accept_parameter=False):
         self.name = name
         self.description = description
+
+        self.accept_parameter = accept_parameter
 
     def get_name(self):
         return self.name
 
     def get_description(self):
         return self.description
+
+    def accept_parameter(self):
+        return accept_parameter
 
     # toString method
     def __str__(self):
@@ -26,7 +31,7 @@ class Task(ABC):
         return str(self)
 
     @abstractmethod
-    def execute(self):
+    def execute(self, parameter=None):
         """
             Returns string message
 

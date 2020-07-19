@@ -22,6 +22,8 @@ class StateModel:
 
         self.timedelta_delay = None
         self.scheduled_task_name = None
+        self.scheduled_task_parameter = None
+
         self.selected_task_name = None
 
         self.restore_initial_state()
@@ -38,19 +40,23 @@ class StateModel:
     def get_selected_task_name(self):
         return self.selected_task_name
 
-    def set_scheduled_task(self, task_name, str_afterdelta=None):
+    def set_scheduled_task(self, task_name, str_afterdelta=None, parameter=None):
         if str_afterdelta is None:
             str_afterdelta = self.default_str_afterdelta
 
-        logging.debug(f"The new task scheduled: <{task_name}>:<{str_afterdelta}>")
+        logging.debug(f"The new task scheduled: <{task_name}>:<{str_afterdelta}>:<{parameter}>")
         self.scheduled_task_name = task_name
         self.timedelta_delay = TimedeltaManager(str_afterdelta)
+        self.scheduled_task_parameter = parameter
 
     def get_scheduled_task_name(self):
         """
             Returns None if no task is scheduled
         """
         return self.scheduled_task_name
+
+    def get_scheduled_task_parameter(self):
+        return self.scheduled_task_parameter
 
     def get_timedelta_delay(self):
         """

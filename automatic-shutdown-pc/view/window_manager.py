@@ -7,7 +7,7 @@ from model.timedelta_manager import TimedeltaManager
 
 class WindowManager:
     """
-    A class to manipulate existing window object, based on (depends) 
+    A class to manipulate existing window object, based on (depends)
     objects unique keys/identificators created by WindowCreator object
     """
 
@@ -33,8 +33,9 @@ class WindowManager:
 
     def echo_info_to_user(self, info_message):
         status_bar = self.window["status_bar"]
-        status_bar.expand(expand_x=True, expand_row=True)
         status_bar.update(value=info_message)
+        status_bar.expand(expand_x=True, expand_row=True)
+
 
     def echo_error_to_user(self, error_message):
         self.echo_info_to_user(error_message)
