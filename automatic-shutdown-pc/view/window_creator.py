@@ -11,9 +11,13 @@ class WindowCreator:
     """
 
     WINDOW_X = 360
-    WINDOW_Y = 390
-    WINDOW_ICO_FILE = os.path.join("resources", "shutdown_icon.ico")
-    ERROR_ICO_FILE = os.path.join("resources", "error_icon2.ico")
+    WINDOW_Y = 420
+    WINDOW_ICO_FILE = os.path.abspath(
+        os.path.join("resources", "shutdown_icon.ico")
+    )
+    ERROR_ICO_FILE = os.path.abspath(
+        os.path.join("resources", "error_icon2.ico")
+    )
 
     def __init__(self, tasks):
         self.tasks = tasks

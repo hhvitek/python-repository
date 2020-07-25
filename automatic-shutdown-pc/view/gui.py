@@ -26,7 +26,9 @@ class Gui:
 
     def _new_task_chosen_by_user(self, task_name):
         self.state_model.set_selected_task_name(task_name)
-        self.window_manager.echo_info_to_user(f"Nová akce vybrána: {task_name}.")
+        self.window_manager.echo_info_to_user(
+            f"Nová akce vybrána: {task_name}"
+        )
 
     # 00:00
     def _new_task_scheduled_by_user(self, task_name, str_afterdelta, parameter=None):

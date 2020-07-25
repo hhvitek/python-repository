@@ -3,7 +3,7 @@
 import logging
 from .task import Task
 
-import PySimpleGUIQt as sg
+import PySimpleGUI as sg
 
 
 class RemainderTask(Task):
