@@ -133,3 +133,5 @@ dmypy.json
 
 # Shortcut files .lnk
 *.lnk
+
+*ignore*.ini
