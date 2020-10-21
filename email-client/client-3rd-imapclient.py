@@ -15,7 +15,7 @@ if __name__ == "__main__":
         datefmt="%H:%M:%S",
     )
 
-    logging.info("STARTING")
+    logging.info("STARTING using IMAPClient")
 
     settings = Settings("./.settings.ini")
     USERNAME = settings.get_username()
