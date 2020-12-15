@@ -20,7 +20,7 @@ class Task(ABC):
         return self.description
 
     def accept_parameter(self):
-        return accept_parameter
+        return self.accept_parameter
 
     # toString method
     def __str__(self):

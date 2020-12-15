@@ -19,7 +19,7 @@ class RemainderTask(Task):
         logging.debug("Execution Remainder...")
 
         sg.popup_ok(
-            self.parameter,
+            parameter,
             title="Information message",
             grab_anywhere=True,
             line_width=200,

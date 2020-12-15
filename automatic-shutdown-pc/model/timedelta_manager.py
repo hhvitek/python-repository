@@ -31,7 +31,7 @@ class TimedeltaManager:
             )  # ValueError
 
             self.when_elapsed = datetime.now() + after_delta
-        except ValueError as e:
+        except ValueError:
             logging.error(
                 f"Cannot change Timedelta object. Supplied <{str_afterdelta}> parameter is not in supported format %H:%M."
             )
