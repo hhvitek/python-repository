@@ -36,7 +36,6 @@ class WindowManager:
         status_bar.update(value=info_message)
         status_bar.expand(expand_x=True, expand_row=True)
 
-
     def echo_error_to_user(self, error_message):
         self.echo_info_to_user(error_message)
         error_popup = self.window_creator.create_error_popup(error_message)
@@ -67,11 +66,12 @@ class WindowManager:
             logging.debug("Setting configuring state.")
             self._set_window_state(True)
 
-    def _set_window_state(self, counfiguring=True):
-        self._can_choose_another_task(counfiguring)
-        self._can_change_timing(counfiguring)
-        self._can_schedule_another_task(counfiguring)
-        self.is_configuring_state = counfiguring
+    def _set_window_state(self, configuring=True):
+        self._can_choose_another_task(configuring)
+        self._can_change_timing(configuring)
+        self._can_schedule_another_task(configuring)
+        self._can_change_parameter(configuring)
+        self.is_configuring_state = configuring
 
     def _can_choose_another_task(self, can=True):
         combo = self.window["combo_tasks"]
@@ -79,7 +79,7 @@ class WindowManager:
 
     def _can_change_timing(self, can=True):
         spin_timing = self.window["spin_timing"]
-        spin_timing.update(disabled=not can)
+        # BUG??? spin_timing.update(disabled=not can)
 
     def _can_schedule_another_task(self, can=True):
         button_submit = self.window["button_submit"]
@@ -87,6 +87,10 @@ class WindowManager:
 
         button_cancel = self.window["button_cancel"]
         button_cancel.update(disabled=can)
+
+    def _can_change_parameter(self, can=True):
+        input_parameter = self.window["input_parameter"]
+        input_parameter.update(disabled=not can)
 
     def _is_in_configuring_state(self):
         return self.is_configuring_state
