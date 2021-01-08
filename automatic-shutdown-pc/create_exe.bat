@@ -4,15 +4,23 @@
 
 @ECHO OFF
 TITLE "Creates scripts .exe file"
+ECHO.
 ECHO Starting building...
 ECHO.
 
 SET "python_script_name=Vypnout PC"
 
-python -m PyInstaller --noconfirm --onedir --windowed --name "%python_script_name%" --icon "resources\shutdown_icon.ico" --add-data "resources;resources" main.py
+python -m PyInstaller ^
+    --noconfirm ^
+    --onedir ^
+    --windowed ^
+    --name "%python_script_name%" ^
+    --icon "resources\shutdown_icon.ico" ^
+    --add-data "resources;resources" ^
+    main.py
 
 ECHO.
-ECHO Cleaning temporary files...
+ECHO Cleaning temporary files... Removing build\ folder and .spec file
 RMDIR /S /Q "build\"
 DEL /Q "%python_script_name%.spec"
 

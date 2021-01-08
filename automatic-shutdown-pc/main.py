@@ -16,9 +16,16 @@ from view.gui import Gui
 # pyinstaller.exe --noconfirm --onedir --windowed --name "Vypnout PC" --icon "resources/shutdown_icon.ico"
 #     --add-data "resources;resources" main.py
 
-# following explicit imports are neccessary because of pyinstaller's error
+# !!!!!!!!the following explicit imports are required to be here for pyinstaller, otherwise pyinstaller can be
+# used with multiple --hidden-import flags instead
+# import tasks.shutdown_task
+# import tasks.restart_task
+# import tasks.remainder_task
 # ModuleNotFoundError: No module named 'tasks.restart_task' etc.
 
+import tasks.shutdown_task
+import tasks.restart_task
+import tasks.remainder_task
 
 TASKS_ACTIVE = ["tasks.shutdown_task.ShutdownTask", "tasks.restart_task.RestartTask", "tasks.remainder_task.RemainderTask"]
 DEFAULT_TASK = "Shutdown"
